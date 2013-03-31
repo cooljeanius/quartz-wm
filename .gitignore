@@ -1,18 +1,19 @@
 ChangeLog
 INSTALL
-aclocal.m4
-autom4te.cache/
+*.cache
 config.guess
 config.h
 config.h.in
-config.log
-config.status
+*.log
+*.status
 config.sub
 configure
 depcomp
 install-sh
 missing
-stamp-h1
+stamp-h*
+*.o
+*~
 
 Makefile.in
 Makefile

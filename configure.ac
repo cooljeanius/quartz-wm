@@ -20,11 +20,15 @@ dnl
 dnl @APPLE_LICENSE_HEADER_END@
 
 AC_PREREQ([2.61])
-AC_INIT(quartz-wm,[1.3.1], [http://xquartz.macosforge.org],quartz-wm)
+AC_INIT([quartz-wm],[1.3.1], [http://xquartz.macosforge.org],[quartz-wm])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign dist-bzip2 dist-xz])
 AM_MAINTAINER_MODE
+AC_CONFIG_SRCDIR([lib/dock-support.h])
+AC_CONFIG_HEADERS([config.h])
 
-AM_CONFIG_HEADER(config.h)
+AC_CANONICAL_HOST
+AC_USE_SYSTEM_EXTENSIONS
 
 # Require xorg-macros: XORG_DEFAULT_OPTIONS
 m4_ifndef([XORG_MACROS_VERSION],
@@ -32,12 +36,36 @@ m4_ifndef([XORG_MACROS_VERSION],
 XORG_MACROS_VERSION(1.3)
 XORG_DEFAULT_OPTIONS
 
+# Checks for programs.
 AC_PROG_CC
 AC_PROG_OBJC
 AC_PROG_INSTALL
+AC_PROG_LN_S
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lXplugin':
+AC_CHECK_LIB([Xplugin], [main])
+
+# Checks for header files.
+AC_PATH_X
+AC_CHECK_HEADERS([stdio.h])
+AC_CHECK_HEADERS([Foundation/Foundation.h Foundation/NSTask.h Foundation/NSUserScriptTask.h NSXPCConnection.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_HEADER_STDBOOL
+AC_C_INLINE
+AC_TYPE_INT32_T
+AC_TYPE_SIZE_T
+AC_TYPE_UINT32_T
+
+# Checks for library functions.
+AC_FUNC_ALLOCA
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([memset setenv sqrt strdup])
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(QUARTZWM, [applewm >= 1.4] pixman-1 x11 xext xinerama xrandr xproto >= 7.0.17)
+PKG_CHECK_MODULES([QUARTZWM], [applewm >= 1.4] pixman-1 x11 xext xinerama xrandr xproto >= 7.0.17)
 AC_SUBST(QUARTZWM_CFLAGS)
 AC_SUBST(QUARTZWM_LIBS)
 
@@ -52,9 +80,9 @@ AC_ARG_ENABLE(xplugin-dock-support, AS_HELP_STRING([--enable-xplugin-dock-suppor
                                     [XPLUGIN_DOCK_SUPPORT="no"])
 AC_SUBST([XPLUGIN_DOCK_SUPPORT])
 if test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"; then
-    AC_DEFINE(XPLUGIN_DOCK_SUPPORT, 1, [Use libXplugin directly for dock support])
+    AC_DEFINE([XPLUGIN_DOCK_SUPPORT], [1], [Use libXplugin directly for dock support])
 fi
-AM_CONDITIONAL(XPLUGIN_DOCK_SUPPORT, [test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"])
+AM_CONDITIONAL([XPLUGIN_DOCK_SUPPORT], [test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"])
 
 AC_OUTPUT([Makefile
 	   lib/Makefile
