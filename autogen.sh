@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "This script basically just runs \"autoreconf\"." 
+echo "Feel free to just run \"autoreconf\" yourself with your favorite flags instead."
+
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 

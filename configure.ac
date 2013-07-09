@@ -33,11 +33,18 @@ AC_USE_SYSTEM_EXTENSIONS
 # Require xorg-macros: XORG_DEFAULT_OPTIONS
 m4_ifndef([XORG_MACROS_VERSION],
           [m4_fatal([must install xorg-macros 1.3 or later before running autoconf/autogen])])
-XORG_MACROS_VERSION(1.3)
+XORG_MACROS_VERSION([1.3])
 XORG_DEFAULT_OPTIONS
+XORG_CHECK_MALLOC_ZERO
+XORG_MEMORY_CHECK_FLAGS
+XORG_ENABLE_INTEGRATION_TESTS
+XORG_ENABLE_UNIT_TESTS
+XORG_LD_WRAP
+XORG_PROG_RAWCPP
 
 # Checks for programs.
-AC_PROG_CC
+AM_PROG_AS
+AM_PROG_CC_C_O
 AC_PROG_OBJC
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -48,12 +55,14 @@ AC_CHECK_LIB([Xplugin], [main])
 
 # Checks for header files.
 AC_PATH_X
-AC_CHECK_HEADERS([stdio.h])
+AC_PATH_XTRA
+AC_CHECK_HEADERS([quartz-wm.h stdio.h x-list.h x-window.h])
 AC_CHECK_HEADERS([Foundation/Foundation.h Foundation/NSTask.h Foundation/NSUserScriptTask.h NSXPCConnection.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
+AX_C___ATTRIBUTE__
 AC_TYPE_INT32_T
 AC_TYPE_SIZE_T
 AC_TYPE_UINT32_T
@@ -66,16 +75,16 @@ AC_CHECK_FUNCS([memset setenv sqrt strdup])
 
 # Checks for pkg-config packages
 PKG_CHECK_MODULES([QUARTZWM], [applewm >= 1.4] pixman-1 x11 xext xinerama xrandr xproto >= 7.0.17)
-AC_SUBST(QUARTZWM_CFLAGS)
-AC_SUBST(QUARTZWM_LIBS)
+AC_SUBST([QUARTZWM_CFLAGS])
+AC_SUBST([QUARTZWM_LIBS])
 
-AC_ARG_WITH(bundle-id-prefix,  AS_HELP_STRING([--with-bundle-id-prefix=PATH], [Prefix to use for bundle identifiers (default: org.x)]),
+AC_ARG_WITH([bundle-id-prefix],  [AS_HELP_STRING([--with-bundle-id-prefix=PATH], [Prefix to use for bundle identifiers (default: org.x)])],
                                [BUNDLE_ID_PREFIX="${withval}"],
                                [BUNDLE_ID_PREFIX="org.x"])
 AC_SUBST([BUNDLE_ID_PREFIX])
 AC_DEFINE_UNQUOTED(BUNDLE_ID_PREFIX, "$BUNDLE_ID_PREFIX", [Prefix to use for bundle identifiers])
 
-AC_ARG_ENABLE(xplugin-dock-support, AS_HELP_STRING([--enable-xplugin-dock-support], [Enable using libXplugin directly for dock support (default: NO)]),
+AC_ARG_ENABLE([xplugin-dock-support], [AS_HELP_STRING([--enable-xplugin-dock-support], [Enable using libXplugin directly for dock support (default: NO)])],
                                     [XPLUGIN_DOCK_SUPPORT="${enableval}"],
                                     [XPLUGIN_DOCK_SUPPORT="no"])
 AC_SUBST([XPLUGIN_DOCK_SUPPORT])
@@ -84,7 +93,8 @@ if test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"; then
 fi
 AM_CONDITIONAL([XPLUGIN_DOCK_SUPPORT], [test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"])
 
-AC_OUTPUT([Makefile
-	   lib/Makefile
-	   src/Makefile
-	   man/Makefile])
+AC_CONFIG_FILES([Makefile
+	         lib/Makefile
+	         src/Makefile
+	         man/Makefile])
+AC_OUTPUT
