@@ -22,10 +22,11 @@ dnl @APPLE_LICENSE_HEADER_END@
 AC_PREREQ([2.61])
 AC_INIT([quartz-wm],[1.3.1], [http://xquartz.macosforge.org],[quartz-wm])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign dist-bzip2 dist-xz])
 AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([lib/dock-support.h])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.h])dnl
 
 AC_CANONICAL_HOST
 AC_USE_SYSTEM_EXTENSIONS
@@ -51,13 +52,14 @@ AC_PROG_LN_S
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lXplugin':
-AC_CHECK_LIB([Xplugin], [main])
+AC_CHECK_LIB([Xplugin],[main])dnl
 
 # Checks for header files.
 AC_PATH_X
 AC_PATH_XTRA
 AC_CHECK_HEADERS([quartz-wm.h stdio.h x-list.h x-window.h])
-AC_CHECK_HEADERS([Foundation/Foundation.h Foundation/NSTask.h Foundation/NSUserScriptTask.h NSXPCConnection.h])
+AC_CHECK_HEADERS([Foundation/Foundation.h Foundation/NSTask.h \
+                  Foundation/NSUserScriptTask.h NSXPCConnection.h])dnl
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -71,28 +73,35 @@ AC_TYPE_UINT32_T
 AC_FUNC_ALLOCA
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([memset setenv sqrt strdup])
+AC_CHECK_FUNCS([memset setenv sqrt strdup])dnl
 
 # Checks for pkg-config packages
 PKG_CHECK_MODULES([QUARTZWM], [applewm >= 1.4] pixman-1 x11 xext xinerama xrandr xproto >= 7.0.17)
-AC_SUBST([QUARTZWM_CFLAGS])
-AC_SUBST([QUARTZWM_LIBS])
+AC_SUBST([QUARTZWM_CFLAGS])dnl
+AC_SUBST([QUARTZWM_LIBS])dnl
 
-AC_ARG_WITH([bundle-id-prefix],  [AS_HELP_STRING([--with-bundle-id-prefix=PATH], [Prefix to use for bundle identifiers (default: org.x)])],
+AC_ARG_WITH([bundle-id-prefix],
+            [AS_HELP_STRING([--with-bundle-id-prefix=PATH],
+                        [Prefix to use for bundle identifiers (default: org.x)])],
                                [BUNDLE_ID_PREFIX="${withval}"],
                                [BUNDLE_ID_PREFIX="org.x"])
 AC_SUBST([BUNDLE_ID_PREFIX])
-AC_DEFINE_UNQUOTED(BUNDLE_ID_PREFIX, "$BUNDLE_ID_PREFIX", [Prefix to use for bundle identifiers])
+AC_DEFINE_UNQUOTED([BUNDLE_ID_PREFIX],["${BUNDLE_ID_PREFIX}"],
+                   [Prefix to use for bundle identifiers])dnl
 
-AC_ARG_ENABLE([xplugin-dock-support], [AS_HELP_STRING([--enable-xplugin-dock-support], [Enable using libXplugin directly for dock support (default: NO)])],
+AC_ARG_ENABLE([xplugin-dock-support],
+              [AS_HELP_STRING([--enable-xplugin-dock-support],
+                              [Enable using libXplugin directly for dock support (default: NO)])],
                                     [XPLUGIN_DOCK_SUPPORT="${enableval}"],
                                     [XPLUGIN_DOCK_SUPPORT="no"])
 AC_SUBST([XPLUGIN_DOCK_SUPPORT])
-if test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"; then
-    AC_DEFINE([XPLUGIN_DOCK_SUPPORT], [1], [Use libXplugin directly for dock support])
+if test "x${XPLUGIN_DOCK_SUPPORT}" = "xyes"; then
+    AC_DEFINE([XPLUGIN_DOCK_SUPPORT],[1],
+              [Use libXplugin directly for dock support])
 fi
-AM_CONDITIONAL([XPLUGIN_DOCK_SUPPORT], [test "x$XPLUGIN_DOCK_SUPPORT" = "xyes"])
+AM_CONDITIONAL([XPLUGIN_DOCK_SUPPORT],[test "x${XPLUGIN_DOCK_SUPPORT}" = "xyes"])
 
+# Output.
 AC_CONFIG_FILES([Makefile
 	         lib/Makefile
 	         src/Makefile

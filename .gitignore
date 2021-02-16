@@ -14,6 +14,10 @@ missing
 stamp-h*
 *.o
 *~
+*.gbf
+*.gpr
+lib/quartz-wm.rep/idata/*/*.db/tmp*.ps
+*.lock
 
 Makefile.in
 Makefile
