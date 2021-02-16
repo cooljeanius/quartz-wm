@@ -19,7 +19,7 @@
 #
 # @APPLE_LICENSE_HEADER_END@
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 --install
 
 DIST_SUBDIRS = lib src man
 BASE_SUBDIRS = src man

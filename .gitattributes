@@ -1,3 +1,4 @@
 *.m diff=objc
 *.h diff=objc
 build-aux/compile linguist-vendored
+aclocal.m4 linguist-vendored

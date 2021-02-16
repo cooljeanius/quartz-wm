@@ -1,6 +1,7 @@
 ChangeLog
 INSTALL
 *.cache
+confdefs.h
 config.guess
 config.h
 config.h.in
@@ -8,6 +9,7 @@ config.h.in
 *.status
 config.sub
 configure
+conftest*
 depcomp
 install-sh
 missing
