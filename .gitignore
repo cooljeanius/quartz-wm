@@ -23,3 +23,4 @@ lib/quartz-wm.rep/idata/*/*.db/tmp*.ps
 
 Makefile.in
 Makefile
+*.bak
